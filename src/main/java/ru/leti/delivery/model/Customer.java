@@ -1,19 +1,14 @@
 package ru.leti.delivery.model;
 
-public class Customer {
-  private String name;
-  private String phone;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
+/** Клиент службы доставки. */
+public class Customer extends Person {
 
   public Customer(String name, String phone) {
-    this.name = name;
-    this.phone = phone;
+    super(name, phone);
+  }
+
+  @Override
+  public String toString() {
+    return getName() + ", тел. " + getPhone();
   }
 }
