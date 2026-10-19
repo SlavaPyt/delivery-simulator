@@ -1,0 +1,47 @@
+@startuml
+!include style.puml
+
+interface DeliveryMethod {
+  + getTitle(): String
+  + calculateCost(itemsTotal: BigDecimal): BigDecimal
+  + estimateTime(): Duration
+  + requiresCourier(): boolean
+  + getDispatchStatus(): OrderStatus
+  + describeDestination(address: String): String
+}
+
+abstract class CourierDelivery {
+  + requiresCourier(): boolean
+  + getDispatchStatus(): OrderStatus
+  + describeDestination(address: String): String
+}
+
+class StandardDelivery {
+  + calculateCost(itemsTotal): BigDecimal
+  + estimateTime(): Duration
+}
+
+class ExpressDelivery {
+  + calculateCost(itemsTotal): BigDecimal
+  + estimateTime(): Duration
+}
+
+class PickupDelivery {
+  - pickupPoint: String
+  + calculateCost(itemsTotal): BigDecimal
+  + estimateTime(): Duration
+  + requiresCourier(): boolean
+  + getDispatchStatus(): OrderStatus
+  + describeDestination(address): String
+}
+
+enum OrderStatus
+
+CourierDelivery .up.|> DeliveryMethod
+PickupDelivery .up.|> DeliveryMethod
+StandardDelivery -up-|> CourierDelivery
+ExpressDelivery -up-|> CourierDelivery
+DeliveryMethod .right.> OrderStatus
+
+CourierDelivery -[hidden]right- PickupDelivery
+@enduml

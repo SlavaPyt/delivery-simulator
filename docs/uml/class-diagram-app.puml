@@ -1,0 +1,82 @@
+@startuml
+!include style.puml
+left to right direction
+
+class Main {
+  + main(args: String[])
+}
+
+class ConsoleApp {
+  - menu: List<MenuItem>
+  + ConsoleApp(orderService, courierService, input, printer)
+  + run()
+}
+
+class ConsoleInput {
+  - echoInput: boolean
+  + readLine(prompt: String): String
+  + read(prompt, parser: Function<String, T>): T
+  + readInt(prompt, min: int, max: int): int
+  + readPrice(prompt: String): BigDecimal
+  + confirm(question: String): boolean
+}
+
+class ConsolePrinter {
+  + printMenu(titles: List<String>)
+  + printOrderTable(orders: List<Order>)
+  + printOrderDetails(order: Order)
+  + printDeliveryQuotes(quotes: List<DeliveryQuote>)
+  + printCouriers(couriers: List<Courier>)
+  + printInfo(message: String)
+  + printError(message: String)
+}
+
+class OrderService {
+  - orders: Map<Integer, Order>
+  - nextOrderId: int
+  + OrderService(deliveryMethods: List<DeliveryMethod>)
+  + createOrder(name, phone, address, items): Order
+  + getOrder(orderId: int): Order
+  + getAllOrders(): List<Order>
+  + addItem(orderId: int, item: OrderItem)
+  + quoteDelivery(orderId: int): List<DeliveryQuote>
+  + chooseDeliveryMethod(orderId: int, method): DeliveryQuote
+  + assignCourier(orderId: int, courier: Courier)
+  + changeStatus(orderId: int, status: OrderStatus)
+}
+
+class CourierService {
+  - couriers: List<Courier>
+  + addCourier(name, phone): Courier
+  + getAllCouriers(): List<Courier>
+  + getAvailableCouriers(): List<Courier>
+  + changeStatus(courier, status: CourierStatus)
+}
+
+class DeliveryQuote <<record>> {
+  + method: DeliveryMethod
+  + cost: BigDecimal
+  + estimatedTime: Duration
+  + requiresCourier(): boolean
+}
+
+class Order
+class Courier
+interface DeliveryMethod
+
+Main ..> ConsoleApp : создаёт
+Main ..> OrderService : создаёт
+Main ..> CourierService : создаёт
+
+ConsoleApp --> ConsoleInput
+ConsoleApp --> ConsolePrinter
+ConsoleApp --> OrderService
+ConsoleApp --> CourierService
+
+OrderService o-- "0..*" Order
+OrderService o-- "1..*" DeliveryMethod
+OrderService ..> DeliveryQuote : создаёт
+CourierService o-- "0..*" Courier
+ConsolePrinter ..> Order
+ConsolePrinter ..> DeliveryQuote
+@enduml

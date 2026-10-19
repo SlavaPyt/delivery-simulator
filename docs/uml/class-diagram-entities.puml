@@ -1,0 +1,83 @@
+@startuml
+!include style.puml
+
+abstract class Person {
+  - name: String
+  - phone: String
+  # Person(name: String, phone: String)
+  + getName(): String
+  + setName(name: String)
+  + getPhone(): String
+  + setPhone(phone: String)
+}
+
+class Customer {
+  + Customer(name, phone)
+}
+
+class Courier {
+  - status: CourierStatus
+  + Courier(name, phone)
+  + getStatus(): CourierStatus
+  + setStatus(status: CourierStatus)
+  + isAvailable(): boolean
+  ~ occupy()
+  ~ release()
+}
+
+enum CourierStatus {
+  BUSY
+  ON_BREAK
+  OFFLINE
+  AVAILABLE
+}
+
+class OrderItem {
+  - productName: String
+  - quantity: int
+  - unitPrice: BigDecimal
+  + OrderItem(productName, quantity, unitPrice)
+  + getTotal(): BigDecimal
+}
+
+class Order {
+  - id: int
+  - address: String
+  - status: OrderStatus
+  + Order(id, customer, address)
+  + addItem(item: OrderItem)
+  + chooseDeliveryMethod(method: DeliveryMethod)
+  + assignCourier(courier: Courier)
+  + changeStatus(next: OrderStatus)
+  + getAvailableTransitions(): List<OrderStatus>
+  + getItemsTotal(): BigDecimal
+  + getDeliveryCost(): BigDecimal
+  + getTotalCost(): BigDecimal
+  + getDestination(): String
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  IN_DELIVERY
+  READY_FOR_PICKUP
+  COMPLETED
+  CANCELLED
+  + getAllowedNext(): Set<OrderStatus>
+  + canTransitionTo(next): boolean
+  + isDispatch(): boolean
+  + isFinal(): boolean
+}
+
+interface DeliveryMethod
+
+Person <|-- Customer
+Person <|-- Courier
+Courier -down-> CourierStatus : status
+
+Order -left-> "0..1" Courier : courier
+Order *-right- "1" Customer
+Order *-down- "1..*" OrderItem
+Order o-down- "0..1" DeliveryMethod
+Order -down-> OrderStatus : status
+@enduml

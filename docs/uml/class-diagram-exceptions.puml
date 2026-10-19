@@ -1,0 +1,18 @@
+@startuml
+!include style.puml
+
+class RuntimeException <<java.lang>>
+
+class DeliveryException {
+  + DeliveryException(message: String)
+}
+
+class ValidationException
+class InvalidOperationException
+class NotFoundException
+
+RuntimeException <|-- DeliveryException
+DeliveryException <|-- ValidationException
+DeliveryException <|-- InvalidOperationException
+DeliveryException <|-- NotFoundException
+@enduml
