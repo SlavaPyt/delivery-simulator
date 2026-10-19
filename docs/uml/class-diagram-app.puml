@@ -1,6 +1,5 @@
 @startuml
 !include style.puml
-left to right direction
 
 class Main {
   + main(args: String[])
@@ -64,19 +63,22 @@ class Order
 class Courier
 interface DeliveryMethod
 
-Main ..> ConsoleApp : создаёт
-Main ..> OrderService : создаёт
-Main ..> CourierService : создаёт
+Main ..> ConsoleApp : создаёт и запускает
 
-ConsoleApp --> ConsoleInput
-ConsoleApp --> ConsolePrinter
-ConsoleApp --> OrderService
-ConsoleApp --> CourierService
+ConsoleApp -down-> ConsoleInput
+ConsoleApp -down-> ConsolePrinter
+ConsoleApp -down-> OrderService
+ConsoleApp -down-> CourierService
 
-OrderService o-- "0..*" Order
-OrderService o-- "1..*" DeliveryMethod
+ConsoleInput -[hidden]right- ConsolePrinter
+ConsolePrinter -[hidden]down- OrderService
+ConsoleInput -[hidden]down- CourierService
+OrderService -[hidden]right- CourierService
+
+OrderService o-down- "0..*" Order
+OrderService o-down- "1..*" DeliveryMethod
 OrderService ..> DeliveryQuote : создаёт
-CourierService o-- "0..*" Courier
+CourierService o-down- "0..*" Courier
 ConsolePrinter ..> Order
 ConsolePrinter ..> DeliveryQuote
 @enduml
