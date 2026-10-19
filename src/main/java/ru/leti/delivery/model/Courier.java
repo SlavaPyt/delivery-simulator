@@ -1,3 +1,5 @@
+package ru.leti.delivery.model;
+
 public class Courier {
     private String name;
     private String phone;
