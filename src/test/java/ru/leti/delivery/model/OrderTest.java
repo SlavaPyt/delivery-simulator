@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.leti.delivery.exception.InvalidOperationException;
@@ -280,5 +281,26 @@ class OrderTest {
     order.chooseDeliveryMethod(new ExpressDelivery());
 
     assertEquals("ул. Ленина, 1", order.getDestination());
+  }
+
+  @Test
+  void availableTransitionsDependOnStatusAndDeliveryMethod() {
+    assertEquals(
+        List.of(OrderStatus.CONFIRMED, OrderStatus.CANCELLED), order.getAvailableTransitions());
+
+    prepareConfirmedCourierOrder();
+    assertEquals(
+        List.of(OrderStatus.IN_DELIVERY, OrderStatus.CANCELLED), order.getAvailableTransitions());
+
+    Order pickupOrder = new Order(2, new Customer("Иван", "89991234567"), "ул. Мира, 5");
+    pickupOrder.addItem(new OrderItem("Книга", 1, BigDecimal.TEN));
+    pickupOrder.chooseDeliveryMethod(new PickupDelivery());
+    pickupOrder.changeStatus(OrderStatus.CONFIRMED);
+    assertEquals(
+        List.of(OrderStatus.READY_FOR_PICKUP, OrderStatus.CANCELLED),
+        pickupOrder.getAvailableTransitions());
+
+    pickupOrder.changeStatus(OrderStatus.CANCELLED);
+    assertTrue(pickupOrder.getAvailableTransitions().isEmpty());
   }
 }

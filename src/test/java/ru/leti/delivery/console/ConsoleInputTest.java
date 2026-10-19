@@ -113,4 +113,15 @@ class ConsoleInputTest {
     assertThrows(ValidationException.class, () -> ConsoleInput.parseInt("", 1, 10));
     assertEquals(7, ConsoleInput.parseInt("+7", 1, 10));
   }
+
+  @Test
+  void echoesInputWhenEnabled() {
+    ConsoleInput input =
+        new ConsoleInput(
+            new ByteArrayInputStream("Анна\n".getBytes(StandardCharsets.UTF_8)), out, true);
+
+    input.readLine("Имя");
+
+    assertEquals("Имя: Анна" + System.lineSeparator(), output());
+  }
 }

@@ -32,10 +32,22 @@ public class ConsoleInput {
 
   private final BufferedReader reader;
   private final PrintStream out;
+  private final boolean echoInput;
 
   public ConsoleInput(InputStream in, PrintStream out) {
+    this(in, out, false);
+  }
+
+  /**
+   * Создаёт чтение с консоли.
+   *
+   * @param echoInput повторять введённые строки в выводе; нужно, когда ввод идёт из файла или
+   *     канала, а не с клавиатуры, чтобы запись сеанса оставалась читаемой
+   */
+  public ConsoleInput(InputStream in, PrintStream out, boolean echoInput) {
     this.reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
     this.out = out;
+    this.echoInput = echoInput;
   }
 
   /**
@@ -58,6 +70,9 @@ public class ConsoleInput {
       throw new InputClosedException();
     }
     String trimmed = line.trim();
+    if (echoInput) {
+      out.println(trimmed);
+    }
     if (CANCEL_COMMANDS.contains(trimmed.toLowerCase(Locale.ROOT))) {
       throw new OperationCancelledException();
     }

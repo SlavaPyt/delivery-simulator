@@ -50,4 +50,13 @@ class OrderStatusTest {
       assertFalse(status.isFinal());
     }
   }
+
+  @Test
+  void dispatchStatusesAreDeliveryAndPickup() {
+    assertTrue(IN_DELIVERY.isDispatch());
+    assertTrue(READY_FOR_PICKUP.isDispatch());
+    for (OrderStatus status : EnumSet.of(NEW, CONFIRMED, COMPLETED, CANCELLED)) {
+      assertFalse(status.isDispatch());
+    }
+  }
 }

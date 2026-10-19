@@ -91,6 +91,16 @@ public class Order {
     return deliveryMethod == null ? address : deliveryMethod.describeDestination(address);
   }
 
+  /**
+   * Статусы, в которые заказ можно перевести из текущего с учётом способа доставки: например, при
+   * самовывозе нет статуса «В доставке».
+   */
+  public List<OrderStatus> getAvailableTransitions() {
+    return status.getAllowedNext().stream()
+        .filter(next -> !next.isDispatch() || next == deliveryMethod.getDispatchStatus())
+        .toList();
+  }
+
   /** Добавляет позицию; состав заказа можно менять, пока он не подтверждён. */
   public void addItem(OrderItem item) {
     if (item == null) {

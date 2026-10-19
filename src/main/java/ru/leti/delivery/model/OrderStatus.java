@@ -41,6 +41,11 @@ public enum OrderStatus {
     return getAllowedNext().contains(next);
   }
 
+  /** Статус передачи заказа получателю: в доставке или готов к выдаче. */
+  public boolean isDispatch() {
+    return this == IN_DELIVERY || this == READY_FOR_PICKUP;
+  }
+
   /** Конечный статус: заказ завершён или отменён и больше не меняется. */
   public boolean isFinal() {
     return getAllowedNext().isEmpty();
