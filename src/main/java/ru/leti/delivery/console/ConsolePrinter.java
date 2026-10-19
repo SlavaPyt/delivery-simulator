@@ -19,7 +19,7 @@ import ru.leti.delivery.service.DeliveryQuote;
 public class ConsolePrinter {
 
   private static final int WIDTH = 78;
-  private static final String ORDER_ROW = "%-4s %-22s %-15s %-30s %-18s %s";
+  private static final String ORDER_ROW = "%-4s %-16s %-14s %-29s %-14s %s";
   private static final int AMOUNT_COLUMN_EXTRA = 8;
   private static final String DETAIL_ROW = "  %-20s %s";
 
@@ -80,10 +80,10 @@ public class ConsolePrinter {
           String.format(
               ORDER_ROW,
               order.getId(),
-              fit(order.getCustomer().getName(), 22),
-              fit(order.getStatus().getTitle(), 15),
-              fit(order.getDeliveryMethod().map(DeliveryMethod::getTitle).orElse("не выбрана"), 30),
-              fit(courierSummary(order), 18),
+              fit(order.getCustomer().getName(), 16),
+              fit(order.getStatus().getTitle(), 14),
+              fit(order.getDeliveryMethod().map(DeliveryMethod::getTitle).orElse("не выбрана"), 29),
+              fit(courierSummary(order), 14),
               formatMoney(order.getTotalCost())));
     }
   }
