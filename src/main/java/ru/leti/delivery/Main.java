@@ -2,6 +2,7 @@ package ru.leti.delivery;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import ru.leti.delivery.console.ConsoleApp;
 import ru.leti.delivery.console.ConsoleInput;
@@ -12,8 +13,15 @@ import ru.leti.delivery.model.delivery.StandardDelivery;
 import ru.leti.delivery.service.CourierService;
 import ru.leti.delivery.service.OrderService;
 
-/** Точка входа: собирает компоненты приложения и запускает консольное меню. */
+/**
+ * Точка входа: собирает компоненты приложения и запускает консольное меню.
+ *
+ * <p>Ключ {@code --echo} включает повтор введённых строк в выводе. Он нужен при вводе из файла или
+ * канала, чтобы запись сеанса получалась читаемой.
+ */
 public final class Main {
+
+  private static final String ECHO_FLAG = "--echo";
 
   private Main() {}
 
@@ -29,8 +37,8 @@ public final class Main {
         new OrderService(
             List.of(new StandardDelivery(), new ExpressDelivery(), new PickupDelivery()));
 
-    boolean interactive = System.console() != null;
-    ConsoleInput input = new ConsoleInput(System.in, out, !interactive);
+    boolean echoInput = Arrays.asList(args).contains(ECHO_FLAG);
+    ConsoleInput input = new ConsoleInput(System.in, out, echoInput);
     new ConsoleApp(orderService, courierService, input, new ConsolePrinter(out)).run();
   }
 }
