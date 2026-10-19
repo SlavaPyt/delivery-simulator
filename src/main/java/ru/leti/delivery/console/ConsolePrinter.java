@@ -20,6 +20,7 @@ public class ConsolePrinter {
 
   private static final int WIDTH = 78;
   private static final String ORDER_ROW = "%-4s %-22s %-15s %-30s %-18s %s";
+  private static final int AMOUNT_COLUMN_EXTRA = 8;
   private static final String DETAIL_ROW = "  %-20s %s";
 
   private final PrintStream out;
@@ -69,10 +70,11 @@ public class ConsolePrinter {
       out.println("Заказов пока нет.");
       return;
     }
-    out.println(
+    String header =
         String.format(ORDER_ROW, "№", "Клиент", "Статус", "Доставка", "Курьер", "Сумма")
-            .stripTrailing());
-    out.println("-".repeat(WIDTH + 14));
+            .stripTrailing();
+    out.println(header);
+    out.println("-".repeat(header.length() + AMOUNT_COLUMN_EXTRA));
     for (Order order : orders) {
       out.println(
           String.format(
