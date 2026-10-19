@@ -61,12 +61,12 @@ final class Validation {
     return value;
   }
 
-  static BigDecimal requireNonNegativeMoney(BigDecimal value, String fieldName) {
+  static BigDecimal requirePositiveMoney(BigDecimal value, String fieldName) {
     if (value == null) {
       throw new ValidationException(fieldName + " не задана");
     }
-    if (value.signum() < 0) {
-      throw new ValidationException(fieldName + " не может быть отрицательной");
+    if (value.signum() <= 0) {
+      throw new ValidationException(fieldName + " должна быть больше нуля");
     }
     return value;
   }
