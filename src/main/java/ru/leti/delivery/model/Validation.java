@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import ru.leti.delivery.exception.ValidationException;
 
 /** Общие проверки входных данных для классов модели. */
-final class Validation {
+public final class Validation {
 
   private static final int MAX_TEXT_LENGTH = 200;
   private static final int MIN_PHONE_DIGITS = 10;
@@ -16,7 +16,7 @@ final class Validation {
   private Validation() {}
 
   /** Проверяет, что строка не пуста и не слишком длинна; возвращает её без крайних пробелов. */
-  static String requireText(String value, String fieldName) {
+  public static String requireText(String value, String fieldName) {
     if (value == null || value.isBlank()) {
       throw new ValidationException(fieldName + " не может быть пустым");
     }
@@ -29,7 +29,7 @@ final class Validation {
   }
 
   /** Имя человека: начинается с буквы, далее буквы, пробелы, точки, дефисы и апострофы. */
-  static String requirePersonName(String value) {
+  public static String requirePersonName(String value) {
     String name = requireText(value, "Имя");
     if (!PERSON_NAME.matcher(name).matches()) {
       throw new ValidationException("Имя должно начинаться с буквы и не содержать цифр и символов");
@@ -38,7 +38,7 @@ final class Validation {
   }
 
   /** Телефон: необязательный «+», затем цифры, пробелы, скобки и дефисы; от 10 до 15 цифр. */
-  static String requirePhone(String value) {
+  public static String requirePhone(String value) {
     String phone = requireText(value, "Телефон");
     long digits = phone.chars().filter(Character::isDigit).count();
     if (!PHONE_CHARACTERS.matcher(phone).matches()
@@ -54,14 +54,14 @@ final class Validation {
     return phone;
   }
 
-  static int requirePositive(int value, String fieldName) {
+  public static int requirePositive(int value, String fieldName) {
     if (value <= 0) {
       throw new ValidationException(fieldName + " должно быть положительным числом");
     }
     return value;
   }
 
-  static BigDecimal requirePositiveMoney(BigDecimal value, String fieldName) {
+  public static BigDecimal requirePositiveMoney(BigDecimal value, String fieldName) {
     if (value == null) {
       throw new ValidationException(fieldName + " не задана");
     }
