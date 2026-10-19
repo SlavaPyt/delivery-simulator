@@ -1,5 +1,6 @@
 plugins {
     application
+    id("com.diffplug.spotless") version "7.0.2"
 }
 
 group = "ru.leti"
@@ -23,6 +24,13 @@ tasks.withType<JavaCompile>().configureEach {
 application {
     mainClass.set("ru.leti.delivery.Main")
     applicationDefaultJvmArgs = listOf("-Dfile.encoding=UTF-8")
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        googleJavaFormat("1.25.2")
+    }
 }
 
 tasks.test {
