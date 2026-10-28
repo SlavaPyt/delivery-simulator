@@ -67,6 +67,22 @@
 ./gradlew -q run --console=plain --args="--echo" < сценарий.txt
 ```
 
+### Запуск без Gradle и из редактора
+
+Классы проекта лежат в пакетах, поэтому компилировать нужно все файлы сразу и из корня проекта.
+Кнопка «Run» плагина Code Runner, которая выполняет `javac Main.java` внутри папки пакета, не
+подходит: она не видит остальные классы и сообщает «package ... does not exist».
+
+```bash
+# из корня проекта (macOS / Linux)
+javac -encoding UTF-8 -d out $(find src/main/java -name '*.java')
+java -cp out ru.leti.delivery.Main
+```
+
+Программа читает ввод с клавиатуры, поэтому запускать её нужно в настоящем терминале (в VS Code —
+Terminal → New Terminal), а не в панели Output. Если `./gradlew` отвечает «Permission denied»,
+выполните `chmod +x gradlew` или запустите `sh gradlew run --console=plain`.
+
 ## Структура проекта
 
 ```
